@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/models/applicant_model.dart';
 import 'package:job_finder_app/screens/agents/pages/agentacceptedapp.dart';
 import 'package:job_finder_app/screens/agents/pages/agentnewapplican.dart';
 import 'package:job_finder_app/screens/agents/pages/agentrejectedapp.dart';
+import 'package:job_finder_app/screens/users/services/applicationservices.dart';
 
 class AgentapplicantsPage extends StatefulWidget {
   const AgentapplicantsPage({super.key});
@@ -11,6 +13,31 @@ class AgentapplicantsPage extends StatefulWidget {
 }
 
 class _AgentapplicantsPageState extends State<AgentapplicantsPage> {
+   Applicationservices applicationservices = Applicationservices();
+  List<Application> applicants = [];
+  List<Application> pendingApplicants = [];
+  List<Application> acceptedApplicants = [];
+  List<Application> rejectedApplicants = [];
+
+  void getApplicants() async {
+    applicants = await applicationservices.getApplicantByCompany(context);
+    filterApplicantsByStatus();
+    if (mounted) {
+      setState(() {});
+    }
+  }
+   void filterApplicantsByStatus() {
+    pendingApplicants = applicants.where((app) => app.status == 'pending').toList();
+    acceptedApplicants = applicants.where((app) => app.status == 'accepted').toList();
+    rejectedApplicants = applicants.where((app) => app.status == 'rejected').toList();
+  }
+
+  @override
+  void initState() {
+    getApplicants();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -45,11 +72,11 @@ class _AgentapplicantsPageState extends State<AgentapplicantsPage> {
                     ),
                   ],
                 ),
-                const Expanded(
+                 Expanded(
                     child: TabBarView(children: [
-                  AgentnewapplicantScreen(),
-                  AgentacceptedapplicantScreen(),
-                  AgentrejectedapplicantScreen()
+                  AgentnewapplicantScreen(applicants: pendingApplicants),
+                  AgentacceptedapplicantScreen(applicants: acceptedApplicants),
+                  AgentrejectedapplicantScreen(applicants: rejectedApplicants)
                 ]))
               ],
             ),

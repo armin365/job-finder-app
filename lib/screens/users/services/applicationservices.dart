@@ -70,6 +70,40 @@ try {
     return applicants;
   }
 
+  List<Application> campanyApplicantions = [];
+  Future<List<Application>> getApplicantByCompany(BuildContext context) async {
+    try {
+     
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? id = preferences.getString('companyId');
+
+      http.Response res = await http.get(
+          Uri.parse('$url/api/applicant/getapplicationByCompany/$id'),
+          headers: {"Content-Type": "application/json"});
+      print(res.body);
+      print(res.statusCode);
+      if (context.mounted) {
+        httpResponseHandle(
+            response: res,
+            context: context,
+            onSuccess: () {
+try {
+   for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          campanyApplicantions.add(Application.fromJson(jsonDecode(res.body)[i]));
+        }
+  } catch (e) {
+    print('Error during mapping: $e');
+    showSnackMessage(context, 'Error during data processing.');
+  }            });
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackMessage(context, e.toString());
+      }
+    }
+    return campanyApplicantions;
+  }
+
   // Future<List<Application>> getApplicantByUser(BuildContext context) async {
   //   List<Application> applicants = [];
   //   try {
