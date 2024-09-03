@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/models/company_model.dart';
+import 'package:job_finder_app/providers/company_provider.dart';
 import 'package:job_finder_app/providers/user_provider.dart';
-
 import 'package:job_finder_app/themes/themes.dart';
-import 'package:job_finder_app/widgets/drawer.dart';
+import 'package:job_finder_app/widgets/agentDrawer.dart';
 import 'package:provider/provider.dart';
 
-class AdminDashboard extends StatefulWidget {
-  const AdminDashboard({super.key});
-  static const pagename = '/dashboard';
+class Agentshomepage extends StatefulWidget {
+  const Agentshomepage({super.key});
+  static const pagename = '/agenthomepage';
 
   @override
-  State<AdminDashboard> createState() => _AdminDashboardState();
+  State<Agentshomepage> createState() => _AgentshomepageState();
 }
 
-class _AdminDashboardState extends State<AdminDashboard> {
+class _AgentshomepageState extends State<Agentshomepage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<Userprovider>(
-      context,
-    ).users;
+    var company = Provider.of<CompanyProvider>(context).companies;
+
     final size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: const NavigatorDrawer(),
+      endDrawer: const AgentNavigatorDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -37,8 +36,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     radius: 26,
                     backgroundImage: AssetImage(('assets/images/hormuud.png')),
                   ),
-                  title: Text(user.name),
-                  subtitle: Text(user.email),
+                  title: Text(company.name),
+                  subtitle: Text(company.contactPhone.toString()),
                   trailing: IconButton(
                     icon: const Icon(Icons.menu),
                     onPressed: () {
@@ -53,25 +52,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 const Text(
                   "Dashboard",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'search',
-                    suffixIcon: const Icon(Icons.search),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: Colors.deepPurpleAccent),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: Colors.deepPurpleAccent),
-                    ),
-                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.03,
@@ -94,21 +74,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             radius: 30,
                             backgroundColor: Colors.blue[100],
                             child: const Icon(
-                              Icons.group,
+                              Icons.account_balance,
                               color: Colors.blue,
                               size: 35,
                             ),
                           ),
                           const SizedBox(height: 16.0),
                           Text(
-                            'Uplied Jobs',
+                            'Posted Jobs',
                             style: TextStyle(
                               color: Colors.grey[800],
                             ),
                           ),
                           const SizedBox(height: 8.0),
                           const Text(
-                            '243 Jobs',
+                            '43',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
@@ -151,21 +131,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             radius: 30,
                             backgroundColor: Colors.blue[100],
                             child: const Icon(
-                              Icons.business_center,
+                              Icons.assignment,
                               color: Colors.blue,
                               size: 35,
                             ),
                           ),
                           const SizedBox(height: 16.0),
                           Text(
-                            'Total Jobs',
+                            'Applicants',
                             style: TextStyle(
                               color: Colors.grey[800],
                             ),
                           ),
                           const SizedBox(height: 8.0),
                           const Text(
-                            '304 Jobs',
+                            '34 ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
@@ -193,20 +173,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ],
                 ),
                 SizedBox(
-                  height: size.height * 0.02,
+                  height: size.height * 0.03,
                 ),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Recent Uplied jobs',
+                      'Recent Posted jobs',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text('View All'),
                   ],
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.03,
                 ),
                 Container(
                   height: 110,

@@ -1,61 +1,99 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:job_finder_app/models/category_model.dart';
+import 'package:job_finder_app/models/company_model.dart';
+import 'package:job_finder_app/models/sub_category_model.dart';
 
 class Job {
   final String title;
-  final String description;
-  final String company;
+  final JobCategory category;
+  final SubCategory subcategory;
+  final Company company;
   final String location;
-  final double salary;
-  final String jobtype;
-  final String? id;
-  final String category;
-  final String profile;
+  final String description;
   final DateTime postedDate;
-
-  Job( {
+  final List<dynamic>? responsibilities;
+  final List<dynamic>? qualifications;
+  final double salary;
+  final List<dynamic>? experienceRequirements;
+  final String jobOverview;
+  final String jobType;
+  final String id;
+  final DateTime expiryDate;
+  Job({
     required this.title,
-    required this.description,
+    required this.category,
+    required this.subcategory,
     required this.company,
     required this.location,
-    required this.salary,
-    required this.jobtype,
-    this.id,
-    required this.category,
-    required this.profile,
+    required this.description,
     required this.postedDate,
+    this.responsibilities,
+    this.qualifications,
+    required this.salary,
+    this.experienceRequirements,
+    required this.jobOverview,
+    required this.jobType,
+    required this.id,
+    required this.expiryDate,
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'title': title,
-      'description': description,
-      'company': company,
+      'category': category.toMap(),
+      'subcategory': subcategory.toMap(),
+      'company': company.toMap(),
       'location': location,
+      'description': description,
+      'postedDate': postedDate.millisecondsSinceEpoch,
+      'responsibilities': responsibilities,
+      'qualifications': qualifications,
       'salary': salary,
-      'jobtype': jobtype,
-      'category': category,
-      'profile': profile,
-      'postedDate': postedDate,
+      'experienceRequirements': experienceRequirements,
+      'jobOverview': jobOverview,
+      'jobType': jobType,
       'id': id,
+      'expiryDate': expiryDate.millisecondsSinceEpoch,
     };
   }
 
   factory Job.fromMap(Map<String, dynamic> map) {
     return Job(
       title: map['title'] ?? '',
-      description: map['description'] ?? '',
-      company: map['company'] ?? '',
+      category: JobCategory.fromMap(map['category'] as Map<String, dynamic>),
+      subcategory:
+          SubCategory.fromMap(map['subcategory'] as Map<String, dynamic>),
+      company: Company.fromMap(map['company'] as Map<String, dynamic>),
       location: map['location'] ?? '',
-      salary: map['salary']?.toDouble() ?? 0.0,
-      jobtype: map['jobtype'] ?? '',
-      id: map['id'],
-      category: map['category'] ?? '',
-      profile: map['profile'] ?? '',
-      postedDate: map['postedDate'] ?? '',
+      description: map['description'] ?? '',
+      postedDate: map['postedDate'] != null
+          ? DateTime.parse(map['postedDate'])
+          : DateTime.now(),
+      responsibilities: map['responsibilities'] != null
+          ? List<String>.from(map['responsibilities'] as List)
+          : null,
+      qualifications: map['qualifications'] != null
+          ? List<String>.from(map['qualifications'] as List)
+          : null,
+      salary: (map['salary'] is int)
+          ? (map['salary'] as int).toDouble()
+          : map['salary'] ?? 0.0,
+      experienceRequirements: map['experienceRequirements'] != null
+          ? List<String>.from(map['experienceRequirements'] as List)
+          : null,
+      jobOverview: map['jobOverview'] ?? '',
+      jobType: map['jobType'] ?? '',
+      id: map['_id'] ?? '',
+      expiryDate: map['expiryDate'] != null
+          ? DateTime.parse(map['expiryDate'])
+          : DateTime.now(),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Job.fromJson(String source) => Job.fromMap(json.decode(source));
+  factory Job.fromJson(String source) =>
+      Job.fromMap(json.decode(source) as Map<String, dynamic>);
 }

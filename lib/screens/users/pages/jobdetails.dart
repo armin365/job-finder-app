@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/models/jobmodel.dart';
+import 'package:job_finder_app/providers/user_provider.dart';
+import 'package:job_finder_app/screens/agents/services/agent_services.dart';
 import 'package:job_finder_app/screens/users/pages/home.dart';
+import 'package:job_finder_app/screens/users/services/applicationservices.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class JobdetailsScreen extends StatefulWidget {
@@ -13,13 +17,36 @@ class JobdetailsScreen extends StatefulWidget {
 }
 
 class _JobdetailsScreenState extends State<JobdetailsScreen> {
+  AgentServices agentServices = AgentServices();
+  List<Job> jobs = [];
+  void getUsers() async {
+    jobs = await agentServices.getAllJobss(context: context);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getUsers();
+    super.initState();
+  }
+
+  Applicationservices applicationservices = Applicationservices();
+
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<Userprovider>(
+      context,
+    ).users;
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 30),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            applicationservices.createApplication(
+                context: context, jobId: widget.job.id, userId: user.id);
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.deepPurpleAccent,
             foregroundColor: Colors.white,
@@ -81,7 +108,7 @@ class _JobdetailsScreenState extends State<JobdetailsScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(40),
                         child: Image.asset(
-                          widget.job.profile,
+                          'assets/images/soft.png',
                           width: 60,
                           height: 50,
                         ),
@@ -91,7 +118,7 @@ class _JobdetailsScreenState extends State<JobdetailsScreen> {
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24)),
                     subtitle: Text(
-                        '${widget.job.company} • ${widget.job.location} • ${timeago.format(widget.job.postedDate)}'),
+                        '${widget.job.company.name} • ${widget.job.location} • ${timeago.format(widget.job.postedDate)}'),
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -105,13 +132,22 @@ class _JobdetailsScreenState extends State<JobdetailsScreen> {
                       ),
                       Chip(
                           avatar: const Icon(Icons.access_time),
-                          label: Text(widget.job.jobtype)),
+                          label: Text(widget.job.jobType)),
                       const SizedBox(
                         width: 5,
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
+                  const Text(
+                    'Job Overview',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.job.jobOverview,
+                  ),
+                  const SizedBox(height: 8),
                   const Text(
                     'Job Description',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -120,7 +156,29 @@ class _JobdetailsScreenState extends State<JobdetailsScreen> {
                   Text(
                     widget.job.description,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Job Requirements',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.job.experienceRequirements!.join('\n'),
+                  ),
+                  const Text(
+                    'Job Responsibilities',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(widget.job.responsibilities!.join('\n')),
+                  const Text(
+                    'Job Qualifications',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.job.qualifications!.join('\n'),
+                  ),
                 ],
               ),
             ),

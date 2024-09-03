@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/models/company_model.dart';
 import 'package:job_finder_app/models/jobmodel.dart';
+import 'package:job_finder_app/screens/agents/pages/agentupdatejob.dart';
 import 'package:job_finder_app/screens/agents/services/agent_services.dart';
 import 'package:job_finder_app/themes/themes.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class AdminJobsScreen extends StatefulWidget {
-  const AdminJobsScreen({super.key});
-  static const pagename = '/adminjobs';
-
+class AgentJobsScreen extends StatefulWidget {
+  const AgentJobsScreen({super.key, required this.company});
+  static const pagename = '/agentjobs';
+  final Company company;
   @override
-  State<AdminJobsScreen> createState() => _AdminJobsScreenState();
+  State<AgentJobsScreen> createState() => _AgentJobsScreenState();
 }
 
-class _AdminJobsScreenState extends State<AdminJobsScreen> {
+class _AgentJobsScreenState extends State<AgentJobsScreen> {
   AgentServices agentServices = AgentServices();
   List<Job> jobs = [];
   void getjobs() async {
-    jobs = await agentServices.getAllJobss(context: context);
+    jobs = await agentServices.getPostedJobs(
+        context: context, companyId: widget.company.id);
     if (mounted) {
       setState(() {});
     }
@@ -30,7 +33,9 @@ class _AdminJobsScreenState extends State<AdminJobsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white.withOpacity(0.96),
       appBar: AppBar(
         elevation: 5,
         title: const Text('Jobs'),

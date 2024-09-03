@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/screens/admin/pages/categories.dart';
-import 'package:job_finder_app/screens/admin/pages/companies.dart';
-import 'package:job_finder_app/screens/admin/pages/dashbord.dart';
-import 'package:job_finder_app/screens/admin/pages/jobslist.dart';
-import 'package:job_finder_app/screens/admin/pages/subcategories.dart';
-import 'package:job_finder_app/screens/admin/pages/users.dart';
+import 'package:job_finder_app/providers/company_provider.dart';
+import 'package:job_finder_app/screens/agents/pages/agentapplicants.dart';
+import 'package:job_finder_app/screens/agents/pages/agentjobs.dart';
+import 'package:job_finder_app/screens/agents/pages/agentpostjob.dart';
+import 'package:job_finder_app/screens/agents/pages/agentprofile.dart';
+
+import 'package:job_finder_app/screens/agents/pages/agentshomepage.dart';
 import 'package:job_finder_app/screens/users/services/authservices.dart';
 import 'package:job_finder_app/themes/themes.dart';
+import 'package:provider/provider.dart';
 
-class NavigatorDrawer extends StatefulWidget {
-  const NavigatorDrawer({super.key});
+class AgentNavigatorDrawer extends StatefulWidget {
+  const AgentNavigatorDrawer({super.key});
 
   @override
-  State<NavigatorDrawer> createState() => _NavigatorDrawerState();
+  State<AgentNavigatorDrawer> createState() => _AgentNavigatorDrawerState();
 }
 
-class _NavigatorDrawerState extends State<NavigatorDrawer> {
+class _AgentNavigatorDrawerState extends State<AgentNavigatorDrawer> {
   @override
   Widget build(BuildContext context) {
+    var company = Provider.of<CompanyProvider>(
+      context,
+    ).companies;
     final size = MediaQuery.of(context).size;
     return Drawer(
       child: Material(
@@ -34,7 +39,7 @@ class _NavigatorDrawerState extends State<NavigatorDrawer> {
             ),
             ListTile(
               onTap: () {
-                Navigator.pushNamed(context, AdminDashboard.pagename);
+                Navigator.pushNamed(context, Agentshomepage.pagename);
               },
               contentPadding: EdgeInsets.zero,
               leading: const Icon(
@@ -51,7 +56,52 @@ class _NavigatorDrawerState extends State<NavigatorDrawer> {
             ),
             ListTile(
               onTap: () {
-                Navigator.pushNamed(context, AdminJobsScreen.pagename);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AgentprofileScreen(company: company)));
+              },
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(
+                Icons.account_circle,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Profile',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Agentpostjob(company: company)));
+              },
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(
+                Icons.add_business_outlined,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Post Job',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AgentJobsScreen(company: company)));
               },
               contentPadding: EdgeInsets.zero,
               leading: const Icon(
@@ -68,15 +118,15 @@ class _NavigatorDrawerState extends State<NavigatorDrawer> {
             ),
             ListTile(
               onTap: () {
-                Navigator.pushNamed(context, AdminCategories.pagename);
+                Navigator.pushNamed(context, AgentapplicantsPage.pagename);
               },
               contentPadding: EdgeInsets.zero,
               leading: const Icon(
-                Icons.store,
+                Icons.notification_important,
                 color: Colors.white,
               ),
               title: const Text(
-                'Categories',
+                'Applicants',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -85,49 +135,15 @@ class _NavigatorDrawerState extends State<NavigatorDrawer> {
             ),
             ListTile(
               onTap: () {
-                Navigator.pushNamed(context, AdminSubCategories.pagename);
+                // Navigator.pushNamed(context, AdminUsers.pagename);
               },
               contentPadding: EdgeInsets.zero,
               leading: const Icon(
-                Icons.category,
+                Icons.settings,
                 color: Colors.white,
               ),
               title: const Text(
-                'Sub Categories',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, AdminUsers.pagename);
-              },
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(
-                Icons.group,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Users',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, AdminCompanies.pagename);
-              },
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(
-                Icons.business,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Companies',
+                'Settings',
                 style: TextStyle(color: Colors.white),
               ),
             ),

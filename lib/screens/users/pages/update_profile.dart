@@ -1,11 +1,21 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:job_finder_app/common/textfields.dart';
 import 'package:job_finder_app/models/data.dart';
+import 'package:job_finder_app/models/usermodel.dart';
+import 'package:job_finder_app/providers/user_provider.dart';
+import 'package:job_finder_app/screens/users/services/authservices.dart';
 
 import 'package:job_finder_app/themes/themes.dart';
+import 'package:provider/provider.dart';
 
 class Updateprofile extends StatefulWidget {
-  const Updateprofile({super.key});
+  const Updateprofile({super.key, required this.user});
+  static const pagename = '/updateProfile';
+  final User user;
 
   @override
   State<Updateprofile> createState() => _UpdateprofileState();
@@ -30,12 +40,34 @@ class _UpdateprofileState extends State<Updateprofile> {
   List<TextEditingController> workExperienceControllers = [];
   List<Widget> workExperienceFields = [];
 
+  List<TextEditingController> educationControllers = [];
+  List<Widget> educationFields = [];
+
   String? selectedlocation;
   String? selectedprelocation;
   String? selectedsex;
 
   String? selectededulevel;
   String? selectedstatus;
+
+  void _addEducationField({String? education}) {
+    setState(() {
+      TextEditingController educationController =
+          TextEditingController(text: education);
+      educationControllers.add(educationController);
+      educationFields.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: CustomTextFeild(
+            controller: educationController,
+            hintText: "Education Level",
+            textInputType: TextInputType.text,
+            myicon: Icons.school,
+          ),
+        ),
+      );
+    });
+  }
 
   void _addWorkExperienceField() {
     setState(() {
@@ -71,20 +103,66 @@ class _UpdateprofileState extends State<Updateprofile> {
     statusController.dispose();
 
     edulevelController.dispose();
+    for (var controller in educationControllers) {
+      controller.dispose();
+    }
     for (var controller in workExperienceControllers) {
       controller.dispose();
     }
     super.dispose();
   }
 
+  final Authservices authservices = Authservices();
+  void update() {
+    List<String> educationLevels =
+        educationControllers.map((controller) => controller.text).toList();
+    List<String> workexp =
+        workExperienceControllers.map((controller) => controller.text).toList();
+    authservices.updateUsers(
+        context: context,
+        id: widget.user.id,
+        name: nameController.text,
+        email: emailController.text,
+        phone: int.parse(phoneController.text),
+        location: locationController.text,
+        sex: sexController.text,
+        age: ageController.text,
+        preferredLocation: preferredLocationController.text,
+        education: educationLevels,
+        workExperience: workexp);
+  }
+
+  void changeprofie() {
+    authservices.updateUsersProfile(
+        context: context, id: widget.user.id, image: _logo!);
+  }
+
+  File? _logo;
+  void _logo_picker() async {
+    try {
+      var pickImage =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickImage != null) {
+        setState(() {
+          _logo = File(pickImage.path);
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<Userprovider>(
+      context,
+    ).users;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 30),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: update,
           style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             foregroundColor: iconColor,
@@ -100,10 +178,13 @@ class _UpdateprofileState extends State<Updateprofile> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SafeArea(
             child: Column(
               children: [
+                const SizedBox(
+                  height: 10,
+                ),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -125,30 +206,37 @@ class _UpdateprofileState extends State<Updateprofile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: blue1Color,
-                        ),
-                        child: const CircleAvatar(
-                          radius: 45,
-                          backgroundImage:
-                              AssetImage(('assets/images/profile.jpg')),
+                      GestureDetector(
+                        onTap: _logo_picker,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: blue1Color,
+                          ),
+                          child: CircleAvatar(
+                            radius: 45,
+                            backgroundImage: _logo != null
+                                ? FileImage(_logo!)
+                                : NetworkImage(user.image ??
+                                    'https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg'),
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: size.height * 0.01,
                       ),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Change Picture",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
-                          Icon(
+                          TextButton(
+                              onPressed: changeprofie,
+                              child: const Text(
+                                "Change Picture",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14),
+                              )),
+                          const Icon(
                             Icons.edit,
                             size: 12,
                           )
@@ -162,7 +250,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                 ),
                 CustomTextFeild(
                   controller: nameController,
-                  hintText: "amiin",
+                  hintText: user.name,
                   textInputType: TextInputType.name,
                   myicon: Icons.person,
                 ),
@@ -171,7 +259,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                 ),
                 CustomTextFeild(
                   controller: emailController,
-                  hintText: "amiin@gmail.com",
+                  hintText: user.email,
                   textInputType: TextInputType.name,
                   myicon: Icons.email,
                 ),
@@ -180,7 +268,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                 ),
                 CustomTextFeild(
                   controller: phoneController,
-                  hintText: "612537354",
+                  hintText: user.phone.toString(),
                   textInputType: TextInputType.name,
                   myicon: Icons.phone,
                 ),
@@ -212,7 +300,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                     ),
                     onChanged: (String? newvalue) {
                       setState(() {
-                        selectedprelocation = newvalue;
+                        selectedlocation = newvalue;
                         locationController.text = newvalue ?? '';
                       });
                     }),
@@ -253,7 +341,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                 ),
                 CustomTextFeild(
                   controller: ageController,
-                  hintText: "age",
+                  hintText: user.age.toString(),
                   textInputType: TextInputType.name,
                   myicon: Icons.date_range,
                 ),
@@ -268,7 +356,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                         child: Text(value),
                       );
                     }).toList(),
-                    value: selectedlocation,
+                    value: selectedprelocation,
                     hint: const Center(
                       child: Text('select preferredLocation'),
                     ),
@@ -293,108 +381,120 @@ class _UpdateprofileState extends State<Updateprofile> {
                 SizedBox(
                   height: size.height * 0.01,
                 ),
+
                 const Center(
-                    child: Text(
-                  "Education",
-                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-                )),
-                SizedBox(
-                  height: size.height * 0.01,
+                  child: Text(
+                    "Education",
+                    style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                const Divider(),
-                DropdownButtonFormField(
-                    items:
-                        edulevels.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    value: selectededulevel,
-                    hint: const Center(
-                      child: Text('select Education level'),
+                SizedBox(height: size.height * 0.01),
+
+                // Display education fields
+                ...educationFields,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () => _addEducationField(),
+                      icon: const Icon(Icons.add),
                     ),
-                    icon: const Icon(Icons.school),
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: primaryColor),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: primaryColor),
-                      ),
-                    ),
-                    onChanged: (String? newvalue) {
-                      setState(() {
-                        selectededulevel = newvalue;
-                        edulevelController.text = newvalue ?? '';
-                      });
-                    }),
-                SizedBox(
-                  height: size.height * 0.01,
+                    const Text("Add Education Level")
+                  ],
                 ),
-                if (selectededulevel == 'University or above') ...[
-                  CustomTextFeild(
-                      controller: universitynameController,
-                      hintText: 'University name',
-                      textInputType: TextInputType.text,
-                      myicon: Icons.school),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  CustomTextFeild(
-                      controller: facultyController,
-                      hintText: 'Faculty',
-                      textInputType: TextInputType.text,
-                      myicon: Icons.library_books),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  DropdownButtonFormField(
-                      items: statuses
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      value: selectedstatus,
-                      hint: const Center(
-                        child: Text('select Status'),
-                      ),
-                      icon: const Icon(Icons.collections_bookmark),
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: primaryColor),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: primaryColor),
-                        ),
-                      ),
-                      onChanged: (String? newvalue) {
-                        setState(() {
-                          selectedstatus = newvalue;
-                          statusController.text = newvalue ?? '';
-                        });
-                      }),
-                ] else if (selectededulevel == 'School') ...[
-                  CustomTextFeild(
-                      controller: schoolnameController,
-                      hintText: "School name",
-                      textInputType: TextInputType.text,
-                      myicon: Icons.school),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  CustomTextFeild(
-                      controller: gradeController,
-                      hintText: "grade",
-                      textInputType: TextInputType.text,
-                      myicon: Icons.grade),
-                ],
+                // DropdownButtonFormField(
+                //     items:
+                //         edulevels.map<DropdownMenuItem<String>>((String value) {
+                //       return DropdownMenuItem<String>(
+                //         value: value,
+                //         child: Text(value),
+                //       );
+                //     }).toList(),
+                //     value: selectededulevel,
+                //     hint: const Center(
+                //       child: Text('select Education level'),
+                //     ),
+                //     icon: const Icon(Icons.school),
+                //     decoration: InputDecoration(
+                //       enabledBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(8),
+                //         borderSide: const BorderSide(color: primaryColor),
+                //       ),
+                //       focusedBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(8),
+                //         borderSide: const BorderSide(color: primaryColor),
+                //       ),
+                //     ),
+                //     onChanged: (String? newvalue) {
+                //       setState(() {
+                //         selectededulevel = newvalue;
+                //         edulevelController.text = newvalue ?? '';
+                //       });
+                //     }),
+                // SizedBox(
+                //   height: size.height * 0.01,
+                // ),
+                // if (selectededulevel == 'University or above') ...[
+                //   CustomTextFeild(
+                //       controller: universitynameController,
+                //       hintText: 'University name',
+                //       textInputType: TextInputType.text,
+                //       myicon: Icons.school),
+                //   SizedBox(
+                //     height: size.height * 0.01,
+                //   ),
+                //   CustomTextFeild(
+                //       controller: facultyController,
+                //       hintText: 'Faculty',
+                //       textInputType: TextInputType.text,
+                //       myicon: Icons.library_books),
+                //   SizedBox(
+                //     height: size.height * 0.01,
+                //   ),
+                //   DropdownButtonFormField(
+                //       items: statuses
+                //           .map<DropdownMenuItem<String>>((String value) {
+                //         return DropdownMenuItem<String>(
+                //           value: value,
+                //           child: Text(value),
+                //         );
+                //       }).toList(),
+                //       value: selectedstatus,
+                //       hint: const Center(
+                //         child: Text('select Status'),
+                //       ),
+                //       icon: const Icon(Icons.collections_bookmark),
+                //       decoration: InputDecoration(
+                //         enabledBorder: OutlineInputBorder(
+                //           borderRadius: BorderRadius.circular(8),
+                //           borderSide: const BorderSide(color: primaryColor),
+                //         ),
+                //         focusedBorder: OutlineInputBorder(
+                //           borderRadius: BorderRadius.circular(8),
+                //           borderSide: const BorderSide(color: primaryColor),
+                //         ),
+                //       ),
+                //       onChanged: (String? newvalue) {
+                //         setState(() {
+                //           selectedstatus = newvalue;
+                //           statusController.text = newvalue ?? '';
+                //         });
+                //       }),
+                // ] else if (selectededulevel == 'School') ...[
+                //   CustomTextFeild(
+                //       controller: schoolnameController,
+                //       hintText: "School name",
+                //       textInputType: TextInputType.text,
+                //       myicon: Icons.school),
+                //   SizedBox(
+                //     height: size.height * 0.01,
+                //   ),
+                //   CustomTextFeild(
+                //       controller: gradeController,
+                //       hintText: "grade",
+                //       textInputType: TextInputType.text,
+                //       myicon: Icons.grade),
+                // ],
                 SizedBox(
                   height: size.height * 0.01,
                 ),

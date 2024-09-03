@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder_app/models/applicant_model.dart';
 import 'package:job_finder_app/models/data.dart';
+import 'package:job_finder_app/models/jobmodel.dart';
+import 'package:job_finder_app/screens/agents/services/agent_services.dart';
+import 'package:job_finder_app/screens/users/services/applicationservices.dart';
 import 'package:job_finder_app/themes/themes.dart';
 
 class UpliedjobsScreen extends StatefulWidget {
@@ -12,6 +16,31 @@ class UpliedjobsScreen extends StatefulWidget {
 }
 
 class _UpliedjobsScreenState extends State<UpliedjobsScreen> {
+  AgentServices agentServices = AgentServices();
+  Applicationservices applicationservices = Applicationservices();
+  List<Application> applicant = [];
+  void getApplicants() async {
+    applicant = await applicationservices.getApplicantByUser(context);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  List<Job> jobs = [];
+  void getJobs() async {
+    jobs = await agentServices.getAllJobss(context: context);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getJobs();
+    getApplicants();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +51,12 @@ class _UpliedjobsScreenState extends State<UpliedjobsScreen> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        itemCount: jobs.length,
+        itemCount: applicant.length,
         itemBuilder: (BuildContext context, int index) {
-          var job = jobs[index];
+          var app = applicant[index];
+          var job = app.job;
+          var company = app.company;
+
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Container(
@@ -36,37 +68,38 @@ class _UpliedjobsScreenState extends State<UpliedjobsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.deepPurpleAccent,
-                        foregroundColor: Colors.white,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
-                              (job.profile),
-                              fit: BoxFit.cover,
-                            )),
-                      ),
-                      Text(job.title),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color: blue1Color,
+                  if (company != null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.deepPurpleAccent,
+                          foregroundColor: Colors.white,
+                          backgroundImage: NetworkImage(company.logo),
                         ),
-                        child: const Center(
+                        Text(job?.title ?? 'Title Unavailable'),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: blue1Color,
+                          ),
+                          child: Center(
                             child: Text(
-                          'Accepted',
-                          style: TextStyle(color: iconColor),
-                        )),
-                      ),
-                    ],
-                  ),
-                  Text(job.category),
-                  Text(job.company),
-                  Text(job.location),
+                              app.status ?? 'Status Unavailable',
+                              style: const TextStyle(color: iconColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Text('Company information unavailable'),
+                  if (job != null) ...[
+                    Text(app.user?.name ?? "Title not found"),
+                    Text(company?.name ?? 'Category Unavailable'),
+                  ] else
+                    Text('Job information unavailable'),
                 ],
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/screens/auth/login.dart';
-import 'package:job_finder_app/screens/auth/signup.dart';
+import 'package:job_finder_app/screens/auth/pages/login.dart';
+import 'package:job_finder_app/screens/auth/pages/signup.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const pagename = '/';

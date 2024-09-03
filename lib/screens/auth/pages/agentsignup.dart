@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/common/textfields.dart';
-// import 'package:job_finder_app/screens/admin/pages/dashbord.dart';
-import 'package:job_finder_app/screens/auth/signup.dart';
-import 'package:job_finder_app/screens/users/pages/home.dart';
+import 'package:job_finder_app/screens/auth/pages/login.dart';
+import 'package:job_finder_app/screens/users/services/authservices.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const pagename = '/login';
-  const LoginScreen({super.key});
+class AgentSignUpScreen extends StatefulWidget {
+  static const pagename = '/companysignup';
+  const AgentSignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<AgentSignUpScreen> createState() => _AgentSignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+class _AgentSignUpScreenState extends State<AgentSignUpScreen> {
+  TextEditingController companynamecontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController phonecontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
+final Authservices authservices = Authservices();
+
+   void registerCompany() {
+    authservices.registerUser(
+        context: context,
+        name: companynamecontroller.text,
+        email: emailcontroller.text,
+        phone: phonecontroller.text,
+        password: passwordcontroller.text,
+        role: 'company');
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -28,19 +41,26 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Login to your",
-                    style: TextStyle(fontSize: 40),
-                  ),
-                  const Text(
-                    "account",
-                    style: TextStyle(fontSize: 40),
+                  const Center(
+                    child: Text(
+                      "Sign up as Company",
+                      style: TextStyle(fontSize: 40),
+                    ),
                   ),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
                   CustomTextFeild(
-                    controller: emailController,
+                    controller: companynamecontroller,
+                    hintText: 'enter Company name',
+                    textInputType: TextInputType.name,
+                    myicon: Icons.factory,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  CustomTextFeild(
+                    controller: emailcontroller,
                     hintText: 'enter your email',
                     textInputType: TextInputType.name,
                     myicon: Icons.email,
@@ -49,30 +69,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: size.height * 0.02,
                   ),
                   CustomTextFeild(
-                    controller: passwordController,
-                    hintText: '.........',
+                    controller: phonecontroller,
+                    hintText: 'enter your phone',
+                    textInputType: TextInputType.name,
+                    myicon: Icons.call,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  CustomTextFeild(
+                    controller: passwordcontroller,
+                    hintText: 'enter your password',
                     textInputType: TextInputType.name,
                     myicon: Icons.lock,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.check_box_outline_blank)),
-                          const Text("remember me"),
-                        ],
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Forgot password?",
-                          style: TextStyle(color: Colors.deepPurpleAccent),
-                        ),
-                      ),
-                    ],
                   ),
                   SizedBox(
                     height: size.height * 0.02,
@@ -80,9 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, HomeScreen.pagename);
-                      },
+                      onPressed: registerCompany,
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepPurpleAccent,
                           foregroundColor: Colors.white,
@@ -90,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 12),
                         child: Text(
-                          "Log In",
+                          "Sign Up",
                           style: TextStyle(fontSize: 19),
                         ),
                       ),
@@ -101,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          "Don't have an account?",
+                          "Already have an account?",
                           style: TextStyle(fontSize: 17),
                         ),
                         const SizedBox(
@@ -109,10 +116,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, SignUpScreen.pagename);
+                            Navigator.pushNamed(context, LoginScreen.pagename);
                           },
                           child: const Text(
-                            "Sign Up",
+                            "Login",
                             style: TextStyle(
                                 color: Colors.deepPurpleAccent, fontSize: 17),
                           ),

@@ -6,42 +6,34 @@ class User {
   final String name;
   final String email;
   final int phone;
-  final String? profile;
-  final String location;
-  final String sex;
-  final String role;   //admin employer jobSeeker
+  final String? image;
+  final String? location;
+  final String? sex;
   final String password;
-  final String? dateofbirth;
-  final String? workExperience;
-  final String? jobTitle;
-  final String? company;
+  final String? age;
   final String? preferredLocation;
-  final String? universityName;
-  final String? eduLevel;
-  final String? faculty;
-  final List<dynamic>? favoriteJobs; 
-  final List<dynamic>? postedJobs;
-
+  final List<dynamic>? education;
+  final List<dynamic>? workExperience;
+  final String role;
+  final List<dynamic>? applications;
+  final List<dynamic>? favoriteJobs;
   User({
-  required this.id, 
-  required this.name, 
-  required this.email, 
-  required this.phone, 
-  this.profile, 
-  required this.location, 
-  required this.sex, 
-  required this.role, 
-  required this.password, 
-  this.dateofbirth, 
-  this.workExperience, 
-  this.jobTitle, 
-  this.company, 
-  this.preferredLocation, 
-  this.universityName, 
-  this.eduLevel, 
-  this.faculty, 
-  this.favoriteJobs, 
-  this.postedJobs});
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
+    this.image,
+    this.location,
+    this.sex,
+    required this.password,
+    this.age,
+    this.preferredLocation,
+    this.education,
+    this.workExperience,
+    required this.role,
+    this.applications,
+    this.favoriteJobs,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -49,55 +41,53 @@ class User {
       'name': name,
       'email': email,
       'phone': phone,
-      'profile': profile,
+      'image': image,
       'location': location,
       'sex': sex,
-      'role': role,
       'password': password,
-      'dateofbirth': dateofbirth,
-      'workExperience': workExperience,
-      'jobTitle': jobTitle,
-      'company': company,
+      'age': age,
       'preferredLocation': preferredLocation,
-      'universityName': universityName,
-      'eduLevel': eduLevel,
-      'faculty': faculty,
+      'education': education,
+      'workExperience': workExperience,
+      'role': role,
+      'applications': applications,
       'favoriteJobs': favoriteJobs,
-      'postedJobs': postedJobs,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['_id'] ?? '',
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
+      id: map['_id'] ?? "",
+      name: map['name'] ?? "",
+      email: map['email'] ?? "",
       phone: map['phone'] ?? 0,
-      profile: map['profile'] != null ? map['profile'] as String : null,
-      location: map['location'] ?? '',
-      sex: map['sex'] ?? '',
-      role: map['role'] ?? '',
-      password: map['password'] ?? '',
-      dateofbirth: map['dateofbirth'] != null ? map['dateofbirth'] ?? '' : null,
-      workExperience: map['workExperience'] != null ? map['workExperience'] ?? '': null,
-      jobTitle: map['jobTitle'] != null ? map['jobTitle'] ?? '' : null,
-      company: map['company'] != null ? map['company'] ?? '' : null,
-      preferredLocation: map['preferredLocation'] != null ? map['preferredLocation'] ?? '' : null,
-      universityName: map['universityName'] != null ? map['universityName'] ?? '' : null,
-      eduLevel: map['eduLevel'] != null ? map['eduLevel'] ?? '' : null,
-      faculty: map['faculty'] != null ? map['faculty'] ?? '' : null,
+      image: map['image'] ?? "",
+      location: map['location'] ?? "",
+      sex: map['sex'] ?? "",
+      password: map['password'] ?? "",
+      age: map['age'] ?? "",
+      preferredLocation: map['preferredLocation'],
+      education: map['education'] != null
+          ? List<Map<String, dynamic>>.from(
+              (map['education']?.map((x) => Map<String, dynamic>.from(x))))
+          : null,
+      workExperience: map['workExperience'] != null
+          ? List<Map<String, dynamic>>.from(
+              (map['workExperience']?.map((x) => Map<String, dynamic>.from(x))))
+          : null,
+      role: map['role'] ?? "job_seeker",
+      applications: map['applications'] != null
+          ? List<String>.from(map['applications'])
+          : [],
       favoriteJobs: map['favoriteJobs'] != null
-            ? List<Map<String, dynamic>>.from(
-                (map['favoriteJobs']?.map((x) => Map<String, dynamic>.from(x))))
-            : null,
-      postedJobs:map['postedJobs'] != null
-            ? List<Map<String, dynamic>>.from(
-                (map['postedJobs']?.map((x) => Map<String, dynamic>.from(x))))
-            : null,
-      );
+          ? List<Map<String, dynamic>>.from(
+              (map['favoriteJobs']?.map((x) => Map<String, dynamic>.from(x))))
+          : null,
+    );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory User.fromJson(String source) =>
+      User.fromMap(json.decode(source) as Map<String, dynamic>);
 }

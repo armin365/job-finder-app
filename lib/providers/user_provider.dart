@@ -5,22 +5,27 @@ class Userprovider extends ChangeNotifier {
   User users = User(
       id: '',
       name: '',
-      profile: '',
       email: '',
       phone: 0,
+      image: '',
       location: '',
       sex: '',
-      role: 'jobseeker',
       password: '',
-      dateofbirth: '',
-      workExperience: '',
-      jobTitle: '',
-      company: '',
+      age: '',
       preferredLocation: '',
-      universityName: '',
-      eduLevel: '',
-      faculty: '',
-      favoriteJobs: [],
-      postedJobs: []);
+      education: [],
+      workExperience: [],
+      role: 'job_seeker',
+      applications: [],
+      favoriteJobs: []);
 
+  void setUser(String user) {
+    users = User.fromJson(user);
+    notifyListeners();
+  }
+
+  void setFromModel(User user) {
+    users = user;
+    notifyListeners();
+  }
 }

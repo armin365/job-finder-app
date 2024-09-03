@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/common/textfields.dart';
-import 'package:job_finder_app/screens/auth/login.dart';
+import 'package:job_finder_app/screens/auth/pages/login.dart';
+import 'package:job_finder_app/screens/users/services/authservices.dart';
 
-class SignUpScreen extends StatefulWidget {
-  static const pagename = '/signup';
-  const SignUpScreen({super.key});
+class UserSignUpScreen extends StatefulWidget {
+  static const pagename = '/usersignup';
+  const UserSignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<UserSignUpScreen> createState() => _UserSignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _UserSignUpScreenState extends State<UserSignUpScreen> {
   TextEditingController unamecontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController phonecontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
+  final Authservices authservices = Authservices();
+
+  void registerUser() {
+    authservices.registerUser(
+        context: context,
+        name : unamecontroller.text,
+        email: emailcontroller.text,
+        phone: phonecontroller.text,
+        password: passwordcontroller.text,
+        role: 'job_seeker');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +41,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Create your",
-                    style: TextStyle(fontSize: 40),
-                  ),
-                  const Text(
-                    "account",
-                    style: TextStyle(fontSize: 40),
+                  const Center(
+                    child: Text(
+                      "Sign up",
+                      style: TextStyle(fontSize: 40),
+                    ),
                   ),
                   SizedBox(
                     height: size.height * 0.02,
@@ -79,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: registerUser,
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepPurpleAccent,
                           foregroundColor: Colors.white,

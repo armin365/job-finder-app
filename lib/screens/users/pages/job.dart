@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/models/data.dart';
+import 'package:job_finder_app/models/jobmodel.dart';
+import 'package:job_finder_app/providers/user_provider.dart';
+import 'package:job_finder_app/screens/agents/services/agent_services.dart';
 import 'package:job_finder_app/screens/users/pages/jobdetails.dart';
 import 'package:job_finder_app/themes/themes.dart';
 import 'package:job_finder_app/widgets/customtext.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class JobScreen extends StatefulWidget {
@@ -14,8 +18,26 @@ class JobScreen extends StatefulWidget {
 }
 
 class _JobScreenState extends State<JobScreen> {
+  AgentServices agentServices = AgentServices();
+  List<Job> jobs = [];
+  void getUsers() async {
+    jobs = await agentServices.getAllJobss(context: context);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getUsers();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<Userprovider>(
+      context,
+    ).users;
     final size = MediaQuery.of(context).size;
     var isClicked = false;
     var resultsNumber = jobs.length;
@@ -167,132 +189,145 @@ class _JobScreenState extends State<JobScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: size.height * 0.35,
-                        child: ListView.builder(
-                          itemCount: jobs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var job = jobs[index];
-                            String timeAgo = timeago.format(job.postedDate);
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 150,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15)),
-                                margin: const EdgeInsets.only(top: 10),
-                                child: Column(
-                                  children: [
-                                    ListTile(
-                                      leading: CircleAvatar(
-                                        radius: 26,
-                                        backgroundImage:
-                                            AssetImage((job.profile)),
-                                      ),
-                                      trailing: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            isClicked = !isClicked;
-                                          });
-                                        },
-                                        icon: Icon(
-                                          isClicked
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: primaryColor,
-                                        ),
-                                      ),
-                                      title: Text(
-                                        job.title,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      subtitle: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                      jobs.isEmpty
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : SizedBox(
+                              height: size.height * 0.35,
+                              child: ListView.builder(
+                                itemCount: jobs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  var job = jobs[index];
+                                  String timeAgo =
+                                      timeago.format(job.postedDate);
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: 170,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      margin: const EdgeInsets.only(top: 10),
+                                      child: Column(
                                         children: [
-                                          Text(customText(
-                                            job.company,
-                                          )),
-                                          const Text('.'),
-                                          Text(customText(
-                                            job.location,
-                                          )),
-                                          const Text('.'),
-                                          Text(job.jobtype),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: size.height * 0.01,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.schedule,
-                                                color: Colors.deepPurpleAccent,
-                                              ),
-                                              const SizedBox(
-                                                width: 4,
-                                              ),
-                                              Text(timeAgo.length > 13
-                                                  ? timeAgo.substring(7)
-                                                  : timeAgo),
-                                              const SizedBox(
-                                                width: 15,
-                                              ),
-                                              const Icon(
-                                                Icons.wallet,
-                                                color: Colors.deepPurpleAccent,
-                                              ),
-                                              const SizedBox(
-                                                width: 4,
-                                              ),
-                                              Text(job.salary.toString())
-                                            ],
-                                          ),
-                                          ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Colors.white,
-                                                  side: const BorderSide(
-                                                      width: 2,
-                                                      color: Colors
-                                                          .deepPurpleAccent)),
+                                          ListTile(
+                                            leading: CircleAvatar(
+                                              radius: 26,
+                                              backgroundImage: AssetImage(
+                                                  ('assets/images/profile.jpg')),
+                                            ),
+                                            trailing: IconButton(
                                               onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            JobdetailsScreen(
-                                                                job: job)));
+                                                setState(() {
+                                                  isClicked = !isClicked;
+                                                });
                                               },
-                                              child: const Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  "Apply",
-                                                  style: TextStyle(
+                                              icon: Icon(
+                                                isClicked
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                color: primaryColor,
+                                              ),
+                                            ),
+                                            title: Text(
+                                              job.title,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            subtitle: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(customText(
+                                                  job.company.name,
+                                                )),
+                                                const Text('.'),
+                                                Text(customText(
+                                                  job.location,
+                                                )),
+                                                const Text('.'),
+                                                Text(job.jobType),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.01,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.schedule,
                                                       color: Colors
                                                           .deepPurpleAccent,
-                                                      fontSize: 19),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(timeAgo.length > 13
+                                                        ? timeAgo.substring(7)
+                                                        : timeAgo),
+                                                    const SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    const Icon(
+                                                      Icons.wallet,
+                                                      color: Colors
+                                                          .deepPurpleAccent,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(job.salary.toString())
+                                                  ],
                                                 ),
-                                              ))
+                                                ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        side: const BorderSide(
+                                                            width: 2,
+                                                            color: Colors
+                                                                .deepPurpleAccent)),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  JobdetailsScreen(
+                                                                      job:
+                                                                          job)));
+                                                    },
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        "Apply",
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .deepPurpleAccent,
+                                                            fontSize: 19),
+                                                      ),
+                                                    ))
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      )
+                            )
                     ],
                   ),
                 ),
@@ -328,24 +363,24 @@ class _JobScreenState extends State<JobScreen> {
                     ),
                   ),
                 )),
-            const Positioned(
+            Positioned(
               top: 60,
               left: 10,
               right: 10,
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text(
+                title: const Text(
                   'Good Morning,',
                   style: TextStyle(fontSize: 15),
                 ),
                 subtitle: Text(
-                  'Amiin',
-                  style: TextStyle(
+                  user.name,
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 27),
                 ),
-                trailing: CircleAvatar(
+                trailing: const CircleAvatar(
                   radius: 26,
                   backgroundImage: AssetImage(('assets/images/profile.jpg')),
                 ),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/screens/auth/login.dart';
+import 'package:job_finder_app/models/usermodel.dart';
+import 'package:job_finder_app/providers/user_provider.dart';
 import 'package:job_finder_app/screens/users/pages/changepassword.dart';
 import 'package:job_finder_app/screens/users/pages/update_profile.dart';
 import 'package:job_finder_app/screens/users/pages/upliedjobs.dart';
+import 'package:job_finder_app/screens/users/services/authservices.dart';
 import 'package:job_finder_app/themes/themes.dart';
 import 'package:job_finder_app/widgets/icon_widget.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const pagename = '/settings';
@@ -17,6 +20,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<Userprovider>(
+      context,
+    ).users;
+
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
@@ -51,24 +58,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       shape: BoxShape.circle,
                       color: blue1Color,
                     ),
-                    child: const CircleAvatar(
+                    child: CircleAvatar(
                       radius: 45,
-                      backgroundImage:
-                          AssetImage(('assets/images/profile.jpg')),
+                      backgroundImage: (user.image != null &&
+                              user.image!.isNotEmpty &&
+                              Uri.tryParse(user.image!)?.hasAbsolutePath ==
+                                  true)
+                          ? NetworkImage(user.image!)
+                          : AssetImage('assets/images/profile.jpg')
+                              as ImageProvider,
                     ),
                   ),
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  const Text(
-                    "Amiin",
+                  Text(
+                    user.name,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
                   ),
-                  const Text(
-                    "612890802",
+                  Text(
+                    user.phone.toString(),
                     style: TextStyle(fontSize: 12),
                   ),
-                  const Text("amiin@gmail.com", style: TextStyle(fontSize: 12))
+                  Text(user.email, style: TextStyle(fontSize: 12))
                 ],
               ),
             ),
@@ -80,7 +92,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Updateprofile()));
+                        builder: (context) => Updateprofile(
+                              user: user,
+                            )));
               },
               leading: const IconWidget(
                 color: blue1Color,
@@ -139,9 +153,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: size.height * 0.01,
             ),
             ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, LoginScreen.pagename);
-              },
+              onTap: () => showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Log Out'),
+                      content: const Text('Are you Sure To Logout'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('NO'),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Authservices().logOut(context);
+                            },
+                            child: const Text('YES'))
+                      ],
+                    );
+                  }),
               leading: const IconWidget(
                 color: blue1Color,
                 icon: Icons.logout,
@@ -155,3 +185,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+class AuthServices {}
