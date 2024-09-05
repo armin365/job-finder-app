@@ -13,7 +13,7 @@ class Userprovider extends ChangeNotifier {
       password: '',
       age: '',
       preferredLocation: '',
-      education: [],
+      Education: [],
       workExperience: [],
       role: 'job_seeker',
       applications: [],

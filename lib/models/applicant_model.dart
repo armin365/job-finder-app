@@ -9,16 +9,29 @@ class JobRef {
   String? title;
   dynamic category;
   dynamic subcategory;
+  String? location;
+  List<String>? responsibilities;
+  List<String>? qualifications;
+  List<String>? experienceRequirements;
+
   JobRef({
     this.title,
     this.category,
     this.subcategory,
+    this.location,
+    this.responsibilities,
+    this.qualifications,
+    this.experienceRequirements,
   });
 
   JobRef.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     category = json['category'];
     subcategory = json['subcategory'];
+    location = json['location'];
+    responsibilities = List<String>.from(json['responsibilities'] ?? []);
+    qualifications = List<String>.from(json['qualifications'] ?? []);
+    experienceRequirements = List<String>.from(json['experienceRequirements'] ?? []);
   }
 
   Map<String, dynamic> toJson() {
@@ -30,6 +43,10 @@ class JobRef {
     if (this.subcategory != null) {
       data['subcategory'] = this.subcategory;
     }
+    data['location'] = this.location;
+    data['responsibilities'] = this.responsibilities;
+    data['qualifications'] = this.qualifications;
+    data['experienceRequirements'] = this.experienceRequirements;
     // if (this.job != null) {
     //   data['job'] = this.job!.toJson();
     // }
@@ -75,16 +92,39 @@ class UserRef {
   String? name;
   dynamic email;
   dynamic image;
+  int? phone;
+  String? age;
+  String? location;
+  String? preferredLocation;
+  List<String>? Education;
+  List<String>? workExperience;
+
+
   UserRef({
     this.name,
     this.email,
     this.image,
+    this.phone,
+    this.age,
+    this.location,
+    this.preferredLocation,
+    this.Education,
+    this.workExperience,
+
   });
 
   UserRef.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     email = json['email'];
     image = json['image'];
+    phone = json['phone'];
+    age = json['age'];
+    location = json['location'];
+    preferredLocation = json['preferredLocation'];
+    Education = List<String>.from(json['Education'] ?? []);
+    workExperience = List<String>.from(json['workExperience'] ?? []);
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -96,6 +136,16 @@ class UserRef {
     if (this.image != null) {
       data['image'] = this.image;
     }
+    data['phone'] = this.phone;
+    data['age'] = this.age;
+    data['location'] = this.location;
+    data['preferredLocation'] = this.preferredLocation;
+    data['Education'] = this.Education;
+    data['workExperience'] = this.workExperience;
+
+
+
+
     return data;
   }
 }

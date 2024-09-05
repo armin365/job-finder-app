@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/models/usermodel.dart';
 import 'package:job_finder_app/providers/user_provider.dart';
 import 'package:job_finder_app/screens/users/pages/changepassword.dart';
 import 'package:job_finder_app/screens/users/pages/update_profile.dart';
 import 'package:job_finder_app/screens/users/pages/upliedjobs.dart';
+import 'package:job_finder_app/screens/users/pages/view_profile.dart';
 import 'package:job_finder_app/screens/users/services/authservices.dart';
 import 'package:job_finder_app/themes/themes.dart';
 import 'package:job_finder_app/widgets/icon_widget.dart';
@@ -27,159 +27,179 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.arrow_back_ios,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: size.height * 0.03,
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            const Center(
-              child: Text(
-                'Profile',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+              const Center(
+                child: Text(
+                  'Profile',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                ),
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: blue1Color,
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: blue1Color,
+                      ),
+                      child: CircleAvatar(
+                        radius: 45,
+                        backgroundImage: (user.image != null &&
+                                user.image!.isNotEmpty &&
+                                Uri.tryParse(user.image!)?.hasAbsolutePath ==
+                                    true)
+                            ? NetworkImage(user.image!)
+                            : const AssetImage('assets/images/profile.jpg')
+                                as ImageProvider,
+                      ),
                     ),
-                    child: CircleAvatar(
-                      radius: 45,
-                      backgroundImage: (user.image != null &&
-                              user.image!.isNotEmpty &&
-                              Uri.tryParse(user.image!)?.hasAbsolutePath ==
-                                  true)
-                          ? NetworkImage(user.image!)
-                          : AssetImage('assets/images/profile.jpg')
-                              as ImageProvider,
+                    SizedBox(
+                      height: size.height * 0.03,
                     ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
-                  Text(
-                    user.name,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-                  ),
-                  Text(
-                    user.phone.toString(),
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(user.email, style: TextStyle(fontSize: 12))
-                ],
+                    Text(
+                      user.name,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 19),
+                    ),
+                    Text(
+                      user.phone.toString(),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Text(user.email, style: const TextStyle(fontSize: 12))
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Updateprofile(
-                              user: user,
-                            )));
-              },
-              leading: const IconWidget(
-                color: blue1Color,
-                icon: Icons.person_pin,
-                icolor: iconColor,
+              SizedBox(
+                height: size.height * 0.05,
               ),
-              title: const Text('Update Profile'),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                color: blue1Color,
+              ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ViewProfileScreen()));
+                },
+                leading: const IconWidget(
+                  color: blue1Color,
+                  icon: Icons.person_pin,
+                  icolor: iconColor,
+                ),
+                title: const Text('View Profile'),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: blue1Color,
+                ),
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, UpliedjobsScreen.pagename);
-              },
-              leading: const IconWidget(
-                color: blue1Color,
-                icon: Icons.work_history,
-                icolor: iconColor,
+              SizedBox(
+                height: size.height * 0.01,
               ),
-              title: const Text('Uplied Jobs'),
-              trailing: const Icon(Icons.arrow_forward_ios, color: blue1Color),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, ChangepasswordScreen.pagename);
-              },
-              leading: const IconWidget(
-                color: blue1Color,
-                icon: Icons.settings,
-                icolor: iconColor,
+              ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Updateprofile(
+                                user: user,
+                              )));
+                },
+                leading: const IconWidget(
+                  color: blue1Color,
+                  icon: Icons.person_pin,
+                  icolor: iconColor,
+                ),
+                title: const Text('Update Profile'),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: blue1Color,
+                ),
               ),
-              title: const Text('Change Password'),
-              trailing: const Icon(Icons.arrow_forward_ios, color: blue1Color),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            const ListTile(
-              leading: IconWidget(
-                color: blue1Color,
-                icon: Icons.privacy_tip,
-                icolor: iconColor,
+              SizedBox(
+                height: size.height * 0.01,
               ),
-              title: Text('Privacy Policy'),
-              trailing: Icon(Icons.arrow_forward_ios, color: blue1Color),
-            ),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            ListTile(
-              onTap: () => showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Log Out'),
-                      content: const Text('Are you Sure To Logout'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('NO'),
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Authservices().logOut(context);
-                            },
-                            child: const Text('YES'))
-                      ],
-                    );
-                  }),
-              leading: const IconWidget(
-                color: blue1Color,
-                icon: Icons.logout,
-                icolor: iconColor,
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, UpliedjobsScreen.pagename);
+                },
+                leading: const IconWidget(
+                  color: blue1Color,
+                  icon: Icons.work_history,
+                  icolor: iconColor,
+                ),
+                title: const Text('Aplied Jobs'),
+                trailing:
+                    const Icon(Icons.arrow_forward_ios, color: blue1Color),
               ),
-              title: const Text('Log Out'),
-            ),
-          ],
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, ChangepasswordScreen.pagename);
+                },
+                leading: const IconWidget(
+                  color: blue1Color,
+                  icon: Icons.settings,
+                  icolor: iconColor,
+                ),
+                title: const Text('Change Password'),
+                trailing:
+                    const Icon(Icons.arrow_forward_ios, color: blue1Color),
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              const ListTile(
+                leading: IconWidget(
+                  color: blue1Color,
+                  icon: Icons.privacy_tip,
+                  icolor: iconColor,
+                ),
+                title: Text('Privacy Policy'),
+                trailing: Icon(Icons.arrow_forward_ios, color: blue1Color),
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              ListTile(
+                onTap: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Log Out'),
+                        content: const Text('Are you Sure To Logout'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('NO'),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Authservices().logOut(context);
+                              },
+                              child: const Text('YES'))
+                        ],
+                      );
+                    }),
+                leading: const IconWidget(
+                  color: blue1Color,
+                  icon: Icons.logout,
+                  icolor: iconColor,
+                ),
+                title: const Text('Log Out'),
+              ),
+            ],
+          ),
         ),
       ),
     );

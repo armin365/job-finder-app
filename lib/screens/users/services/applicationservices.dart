@@ -235,4 +235,30 @@ try {
     }
     return applications;
   }
+
+  void updateApplicantStatus({
+    required BuildContext context,
+    required String id,
+    required String status,
+   
+  }) async {
+    try {
+        http.Response res =
+            await http.put(Uri.parse('$url/api/applicant/updateapplicantStatus/$id'),
+                headers: {"Content-Type": "application/json"},
+                body: jsonEncode({
+                  "status": status,
+                }));
+
+        print(res.statusCode);
+        print(res.body);
+        if (res.statusCode == 200) {
+          showSnackMessage(context, 'application updated successfully');
+          Navigator.pop(context);
+        }
+       
+    } catch (e) {
+      showSnackMessage(context, e.toString());
+    }
+  }
 }

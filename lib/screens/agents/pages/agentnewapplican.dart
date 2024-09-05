@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/models/applicant_model.dart';
+import 'package:job_finder_app/screens/agents/pages/agent_update_applicant.dart';
 
 import 'package:job_finder_app/themes/themes.dart';
 
@@ -56,51 +57,63 @@ class _AgentnewapplicantScreenState extends State<AgentnewapplicantScreen> {
                     var company = app.company;
 
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (company != null)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.deepPurpleAccent,
-                                    foregroundColor: Colors.white,
-                                    backgroundImage: NetworkImage(company.logo),
-                                  ),
-                                  Text(job?.title ?? 'Title Unavailable'),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: blue1Color,
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AgentUpdateApplicant(application: app),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (company != null)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.deepPurpleAccent,
+                                      foregroundColor: Colors.white,
+                                      backgroundImage:
+                                          NetworkImage(company.logo),
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        app.status ?? 'Status Unavailable',
-                                        style:
-                                            const TextStyle(color: iconColor),
+                                    Text(job?.title ?? 'Title Unavailable'),
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: blue1Color,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          app.status ?? 'Status Unavailable',
+                                          style:
+                                              const TextStyle(color: iconColor),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            else
-                              const Text('Company information unavailable'),
-                            if (job != null) ...[
-                              Text(app.user?.name ?? "Title not found"),
-                              Text(company?.name ?? 'Category Unavailable'),
-                            ] else
-                              const Text('Job information unavailable'),
-                          ],
+                                  ],
+                                )
+                              else
+                                const Text('Company information unavailable'),
+                              if (job != null) ...[
+                                Text(app.user?.name ?? "Title not found"),
+                                Text(company?.name ?? 'company Unavailable'),
+                              ] else
+                                const Text('Job information unavailable'),
+                            ],
+                          ),
                         ),
                       ),
                     );

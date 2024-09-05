@@ -12,7 +12,7 @@ class User {
   final String password;
   final String? age;
   final String? preferredLocation;
-  final List<dynamic>? education;
+  final List<dynamic>? Education;
   final List<dynamic>? workExperience;
   final String role;
   final List<dynamic>? applications;
@@ -28,7 +28,7 @@ class User {
     required this.password,
     this.age,
     this.preferredLocation,
-    this.education,
+    this.Education,
     this.workExperience,
     required this.role,
     this.applications,
@@ -47,7 +47,7 @@ class User {
       'password': password,
       'age': age,
       'preferredLocation': preferredLocation,
-      'education': education,
+      'Education': Education,
       'workExperience': workExperience,
       'role': role,
       'applications': applications,
@@ -67,14 +67,11 @@ class User {
       password: map['password'] ?? "",
       age: map['age'] ?? "",
       preferredLocation: map['preferredLocation'],
-      education: map['education'] != null
-          ? List<Map<String, dynamic>>.from(
-              (map['education']?.map((x) => Map<String, dynamic>.from(x))))
-          : null,
+      Education:
+          map['Education'] != null ? List<String>.from(map['Education']) : [],
       workExperience: map['workExperience'] != null
-          ? List<Map<String, dynamic>>.from(
-              (map['workExperience']?.map((x) => Map<String, dynamic>.from(x))))
-          : null,
+          ? List<String>.from(map['workExperience'])
+          : [],
       role: map['role'] ?? "job_seeker",
       applications: map['applications'] != null
           ? List<String>.from(map['applications'])
