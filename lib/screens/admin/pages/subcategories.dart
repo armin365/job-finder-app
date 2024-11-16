@@ -44,8 +44,12 @@ class _AdminSubCategoriesState extends State<AdminSubCategories> {
         ],
       ),
       body: subcategories.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                CircularProgressIndicator(),
+              ],
             )
           : Padding(
               padding: const EdgeInsets.all(8.0),
@@ -66,7 +70,6 @@ class _AdminSubCategoriesState extends State<AdminSubCategories> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ListTile(
-                                  contentPadding: EdgeInsets.zero,
                                   title: Text(subcat.name),
                                 ),
                               ],

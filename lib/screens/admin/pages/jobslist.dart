@@ -36,8 +36,12 @@ class _AdminJobsScreenState extends State<AdminJobsScreen> {
         title: const Text('Jobs'),
       ),
       body: jobs.isEmpty
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                CircularProgressIndicator(),
+              ],
             )
           : Padding(
               padding: const EdgeInsets.all(8.0),

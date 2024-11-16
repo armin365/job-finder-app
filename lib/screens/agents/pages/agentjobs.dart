@@ -41,8 +41,12 @@ class _AgentJobsScreenState extends State<AgentJobsScreen> {
         title: const Text('Jobs'),
       ),
       body: jobs.isEmpty
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                CircularProgressIndicator(),
+              ],
             )
           : Padding(
               padding: const EdgeInsets.all(8.0),

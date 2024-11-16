@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/models/applicant_model.dart';
-import 'package:job_finder_app/models/data.dart';
 import 'package:job_finder_app/models/jobmodel.dart';
 import 'package:job_finder_app/screens/agents/services/agent_services.dart';
 import 'package:job_finder_app/screens/users/services/applicationservices.dart';
@@ -63,12 +62,16 @@ class _UpliedjobsScreenState extends State<UpliedjobsScreen> {
         title: const Text('Uplied Jobs'),
       ),
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                const CircularProgressIndicator(),
+              ],
             )
           : applicant.isEmpty
               ? const Center(
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.warning, size: 64, color: Colors.orange),
@@ -129,12 +132,12 @@ class _UpliedjobsScreenState extends State<UpliedjobsScreen> {
                                 ],
                               )
                             else
-                              Text('Company information unavailable'),
+                              const Text('Company information unavailable'),
                             if (job != null) ...[
                               Text(app.user?.name ?? "Title not found"),
                               Text(company?.name ?? 'Category Unavailable'),
                             ] else
-                              Text('Job information unavailable'),
+                              const Text('Job information unavailable'),
                           ],
                         ),
                       ),

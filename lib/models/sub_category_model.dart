@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:job_finder_app/models/category_model.dart';
-
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class SubCategory {
   final String id;

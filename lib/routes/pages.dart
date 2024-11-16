@@ -15,9 +15,11 @@ import 'package:job_finder_app/screens/agents/pages/agentshomepage.dart';
 import 'package:job_finder_app/screens/agents/pages/agentupdatejob.dart';
 import 'package:job_finder_app/screens/auth/pages/login.dart';
 import 'package:job_finder_app/screens/auth/pages/signup.dart';
+import 'package:job_finder_app/screens/forgotpassword/pages/forgot_password.dart';
+import 'package:job_finder_app/screens/forgotpassword/pages/new_password.dart';
+import 'package:job_finder_app/screens/forgotpassword/pages/verification.dart';
 import 'package:job_finder_app/screens/users/pages/changepassword.dart';
 import 'package:job_finder_app/screens/users/pages/home.dart';
-import 'package:job_finder_app/screens/users/pages/update_profile.dart';
 import 'package:job_finder_app/screens/users/pages/upliedjobs.dart';
 
 import 'package:job_finder_app/screens/welcome/welcome.dart';
@@ -55,13 +57,17 @@ Route<dynamic> generate(RouteSettings routes) {
       return MaterialPageRoute(builder: (_) => const AdminAddCategory());
     case Agentshomepage.pagename:
       return MaterialPageRoute(builder: (_) => const Agentshomepage());
-
-    
-
+    case ForgotPassword.pagename:
+      return MaterialPageRoute(builder: (_) => const ForgotPassword());
+    case VerificationScreen.pagename:
+      return MaterialPageRoute(builder: (_) => const VerificationScreen());
+    case NewPassword.pagename:
+      return MaterialPageRoute(builder: (_) => const NewPassword());
     case AgentUpdatejob.pagename:
       return MaterialPageRoute(builder: (_) => const AgentUpdatejob());
     case AgentapplicantsPage.pagename:
       return MaterialPageRoute(builder: (_) => const AgentapplicantsPage());
+
     default:
       return MaterialPageRoute(builder: (_) => const WelcomeScreen());
   }

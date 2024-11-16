@@ -6,7 +6,6 @@ import 'package:job_finder_app/common/textfields.dart';
 import 'package:job_finder_app/models/company_model.dart';
 import 'package:job_finder_app/models/data.dart';
 import 'package:job_finder_app/providers/company_provider.dart';
-import 'package:job_finder_app/screens/users/pages/profile.dart';
 import 'package:job_finder_app/screens/users/services/authservices.dart';
 import 'package:job_finder_app/themes/themes.dart';
 import 'package:provider/provider.dart';

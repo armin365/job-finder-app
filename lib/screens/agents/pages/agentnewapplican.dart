@@ -31,8 +31,12 @@ class _AgentnewapplicantScreenState extends State<AgentnewapplicantScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                CircularProgressIndicator(),
+              ],
             )
           : widget.applicants.isEmpty
               ? const Center(
@@ -57,7 +61,7 @@ class _AgentnewapplicantScreenState extends State<AgentnewapplicantScreen> {
                     var company = app.company;
 
                     return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.push(

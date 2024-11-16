@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder_app/common/textfields.dart';
 import 'package:job_finder_app/screens/auth/pages/signup.dart';
+import 'package:job_finder_app/screens/forgotpassword/pages/forgot_password.dart';
 import 'package:job_finder_app/screens/users/services/authservices.dart';
 // import 'package:job_finder_app/screens/users/pages/home.dart';
 
@@ -88,7 +89,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, ForgotPassword.pagename);
+                          },
                           child: const Text(
                             "Forgot password?",
                             style: TextStyle(color: Colors.deepPurpleAccent),

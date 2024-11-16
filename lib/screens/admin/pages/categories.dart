@@ -76,8 +76,12 @@ class _AdminCategoriesState extends State<AdminCategories> {
                 height: size.height * 0.03,
               ),
               categories.isEmpty
-                  ? const Center(
-                      child: CircularProgressIndicator(),
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/splash.png'),
+                        CircularProgressIndicator(),
+                      ],
                     )
                   : Expanded(
                       child: GridView.builder(

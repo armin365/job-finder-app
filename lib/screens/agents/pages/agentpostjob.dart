@@ -140,9 +140,13 @@ class _AgentpostjobState extends State<Agentpostjob> {
 
   final AgentServices agentServices = AgentServices();
   void createJob() {
-    List<String> responsibilities = responsibilityControllers.map((controller) => controller.text).toList();
-  List<String> qualifications = qualificationControllers.map((controller) => controller.text).toList();
-  List<String> experienceRequirements = experiencerequirementcontrollers.map((controller) => controller.text).toList();
+    List<String> responsibilities =
+        responsibilityControllers.map((controller) => controller.text).toList();
+    List<String> qualifications =
+        qualificationControllers.map((controller) => controller.text).toList();
+    List<String> experienceRequirements = experiencerequirementcontrollers
+        .map((controller) => controller.text)
+        .toList();
     agentServices.createJob(
         context: context,
         companyId: widget.company.id,
@@ -162,7 +166,6 @@ class _AgentpostjobState extends State<Agentpostjob> {
 
   @override
   Widget build(BuildContext context) {
-  
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -249,9 +252,9 @@ class _AgentpostjobState extends State<Agentpostjob> {
                   }).toList(),
                   value: selectedsubCategory,
                   hint: const Center(
-                    child: Text('select sub Category'),
+                    child: Text('select subcat'),
                   ),
-                  icon: const Icon(Icons.business),
+                  icon: const Icon(Icons.category),
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),

@@ -4,6 +4,7 @@ import 'package:job_finder_app/models/jobmodel.dart';
 import 'package:job_finder_app/providers/user_provider.dart';
 import 'package:job_finder_app/screens/agents/services/agent_services.dart';
 import 'package:job_finder_app/screens/users/pages/jobdetails.dart';
+import 'package:job_finder_app/screens/users/services/favoriteservices.dart';
 import 'package:job_finder_app/themes/themes.dart';
 import 'package:job_finder_app/widgets/customtext.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,11 @@ class _JobScreenState extends State<JobScreen> {
     if (mounted) {
       setState(() {});
     }
+  }
+
+  Favoriteservices favoriteservices = Favoriteservices();
+  void addtoFav(String jobId) async {
+    favoriteservices.addToFavorite(context: context, jobId: jobId);
   }
 
   @override
@@ -190,7 +196,7 @@ class _JobScreenState extends State<JobScreen> {
                         ),
                       ),
                       jobs.isEmpty
-                          ? Center(
+                          ? const Center(
                               child: CircularProgressIndicator(),
                             )
                           : SizedBox(
@@ -213,13 +219,14 @@ class _JobScreenState extends State<JobScreen> {
                                       child: Column(
                                         children: [
                                           ListTile(
-                                            leading: CircleAvatar(
+                                            leading: const CircleAvatar(
                                               radius: 26,
                                               backgroundImage: AssetImage(
                                                   ('assets/images/profile.jpg')),
                                             ),
                                             trailing: IconButton(
                                               onPressed: () {
+                                                addtoFav(job.id);
                                                 setState(() {
                                                   isClicked = !isClicked;
                                                 });
@@ -380,9 +387,14 @@ class _JobScreenState extends State<JobScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: 27),
                 ),
-                trailing: const CircleAvatar(
+                trailing: CircleAvatar(
                   radius: 26,
-                  backgroundImage: AssetImage(('assets/images/profile.jpg')),
+                  backgroundImage: (user.image != null &&
+                          user.image!.isNotEmpty &&
+                          Uri.tryParse(user.image!)?.hasAbsolutePath == true)
+                      ? NetworkImage(user.image!)
+                      : const AssetImage('assets/images/profile.jpg')
+                          as ImageProvider,
                 ),
               ),
             ),

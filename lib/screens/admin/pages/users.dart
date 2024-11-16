@@ -36,8 +36,12 @@ class _AdminUsersState extends State<AdminUsers> {
         title: const Text('Users'),
       ),
       body: users.isEmpty
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                CircularProgressIndicator(),
+              ],
             )
           : Padding(
               padding: const EdgeInsets.all(8.0),
@@ -49,31 +53,34 @@ class _AdminUsersState extends State<AdminUsers> {
                         itemCount: users.length,
                         itemBuilder: (BuildContext context, int index) {
                           var user = users[index];
-                          return Container(
-                            height: 90,
-                            color: iconColor,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              leading: CircleAvatar(
-                                radius: 26,
-                                backgroundImage:
-                                    AssetImage(('assets/images/profile.jpg')),
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 90,
+                              color: iconColor,
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: CircleAvatar(
+                                  radius: 26,
+                                  backgroundImage:
+                                      AssetImage(('assets/images/profile.jpg')),
+                                ),
+                                title: Text(user.name),
+                                subtitle: Row(
+                                  children: [
+                                    Text(user.email),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text('•'),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(user.role),
+                                  ],
+                                ),
+                                trailing: Icon(Icons.more_vert),
                               ),
-                              title: Text(user.name),
-                              subtitle: Row(
-                                children: [
-                                  Text(user.email),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text('•'),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(user.role),
-                                ],
-                              ),
-                              trailing: Icon(Icons.more_vert),
                             ),
                           );
                         },

@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 import 'package:job_finder_app/models/company_model.dart';
 import 'package:job_finder_app/models/jobmodel.dart';
@@ -31,7 +30,8 @@ class JobRef {
     location = json['location'];
     responsibilities = List<String>.from(json['responsibilities'] ?? []);
     qualifications = List<String>.from(json['qualifications'] ?? []);
-    experienceRequirements = List<String>.from(json['experienceRequirements'] ?? []);
+    experienceRequirements =
+        List<String>.from(json['experienceRequirements'] ?? []);
   }
 
   Map<String, dynamic> toJson() {
@@ -99,7 +99,6 @@ class UserRef {
   List<String>? Education;
   List<String>? workExperience;
 
-
   UserRef({
     this.name,
     this.email,
@@ -110,7 +109,6 @@ class UserRef {
     this.preferredLocation,
     this.Education,
     this.workExperience,
-
   });
 
   UserRef.fromJson(Map<String, dynamic> json) {
@@ -123,8 +121,6 @@ class UserRef {
     preferredLocation = json['preferredLocation'];
     Education = List<String>.from(json['Education'] ?? []);
     workExperience = List<String>.from(json['workExperience'] ?? []);
-
-
   }
 
   Map<String, dynamic> toJson() {
@@ -142,9 +138,6 @@ class UserRef {
     data['preferredLocation'] = this.preferredLocation;
     data['Education'] = this.Education;
     data['workExperience'] = this.workExperience;
-
-
-
 
     return data;
   }

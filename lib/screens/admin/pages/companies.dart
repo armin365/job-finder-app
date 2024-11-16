@@ -37,8 +37,12 @@ class _AdminCompaniesState extends State<AdminCompanies> {
         title: const Text('Companies'),
       ),
       body: companies.isEmpty
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                CircularProgressIndicator(),
+              ],
             )
           : Padding(
               padding: const EdgeInsets.all(8.0),

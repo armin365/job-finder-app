@@ -30,8 +30,12 @@ class _AgentacceptedapplicantScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/splash.png'),
+                CircularProgressIndicator(),
+              ],
             )
           : widget.applicants.isEmpty
               ? const Center(

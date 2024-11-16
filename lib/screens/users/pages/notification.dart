@@ -11,6 +11,6 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Text("welcome noti");
+    return const Center(child: Text("welcome noti"));
   }
 }

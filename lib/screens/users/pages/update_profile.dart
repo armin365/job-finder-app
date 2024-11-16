@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -185,18 +184,22 @@ class _UpdateprofileState extends State<Updateprofile> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.arrow_back_ios,
-                    ),
-                    Text(
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                        )),
+                    const Text(
                       "Edit Profile",
                       style:
                           TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
                     ),
-                    Icon(Icons.share)
+                    const Icon(Icons.share)
                   ],
                 ),
                 SizedBox(

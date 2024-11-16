@@ -42,8 +42,17 @@ dependencies:
   shared_preferences: ^2.3.1
   cloudinary_public: ^0.23.1
   image_picker: ^1.1.2
+  
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/play_store_512.png"
+  adaptive_icon_background: #ffffff
+  adaptive_icon_foreground: "assets/play_store_512.png"
   flutter_test:
     sdk: flutter
 

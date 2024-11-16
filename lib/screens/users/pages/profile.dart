@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: Icons.person_pin,
                   icolor: iconColor,
                 ),
-                title: const Text('Update Profile'),
+                title: const Text('Apdate Profile'),
                 trailing: const Icon(
                   Icons.arrow_forward_ios,
                   color: blue1Color,

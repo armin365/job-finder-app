@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_finder_app/models/company_model.dart';
 import 'package:job_finder_app/providers/company_provider.dart';
-import 'package:job_finder_app/providers/user_provider.dart';
 import 'package:job_finder_app/themes/themes.dart';
 import 'package:job_finder_app/widgets/agentDrawer.dart';
 import 'package:provider/provider.dart';
